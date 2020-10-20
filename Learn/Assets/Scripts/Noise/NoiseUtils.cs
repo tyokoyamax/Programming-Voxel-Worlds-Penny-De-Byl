@@ -24,7 +24,7 @@ public class NoiseUtils
         float frequency = 1;
         float amplitude = 1;
         float maxValue = 0;
-        for(int i = 0; i < octaves; i++)
+        for (int i = 0; i < octaves; i++)
         {
             total += Mathf.PerlinNoise(x * frequency + seed, z * frequency + seed) * amplitude;
 

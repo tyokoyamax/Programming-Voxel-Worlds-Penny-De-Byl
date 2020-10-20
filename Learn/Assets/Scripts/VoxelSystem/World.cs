@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class World : MonoBehaviour {
+public class World : MonoBehaviour
+{
 
     #region Variables
     [SerializeField]
@@ -18,31 +19,40 @@ public class World : MonoBehaviour {
     private static int worldSize = 4;
 
     public static Vector3[,,] allVertices = new Vector3[chunkSize + 1, chunkHeight + 1, chunkSize + 1];
-	public static Vector3[] allNormals = new Vector3[6];
-	public enum NDIR {UP, DOWN, LEFT, RIGHT, FRONT, BACK}
+    public enum NDIR { UP, DOWN, LEFT, RIGHT, FRONT, BACK }
 
     public static Dictionary<string, Chunk> chunks = new Dictionary<string, Chunk>();
+
+    public static IReadOnlyDictionary<NDIR, Vector3> allNormals = new Dictionary<NDIR, Vector3>()
+    {
+        { NDIR.UP, Vector3.up },
+        { NDIR.DOWN, Vector3.down },
+        { NDIR.LEFT, Vector3.left },
+        { NDIR.RIGHT, Vector3.right },
+        { NDIR.FRONT, Vector3.forward },
+        { NDIR.BACK, Vector3.back },
+    };
     #endregion
 
     #region Custom Methods
     public static string BuildChunkName(Vector3 pos)
     {
-		return
-			(int)pos.x + "_" +
-			(int)pos.y + "_" +
-			(int)pos.z;
-	}
+        return
+            (int)pos.x + "_" +
+            (int)pos.y + "_" +
+            (int)pos.z;
+    }
 
-	private void BuildNewChunkAt(Vector3 chunkPos)
+    private void BuildNewChunkAt(Vector3 chunkPos)
     {
-		Chunk c = new Chunk(chunkSize, chunkHeight, chunkPos, gameObject, atlasMaterial, seed);
-		chunks.Add(c.chunk.name, c);
+        Chunk c = new Chunk(chunkSize, chunkHeight, chunkPos, gameObject, atlasMaterial, seed);
+        chunks.Add(c.chunk.name, c);
         c.DrawChunk(chunkSize, chunkHeight);
-	}
+    }
 
     IEnumerator BuildChunksColumn()
     {
-        for(int i = 0; i < columnHeight; i++)
+        for (int i = 0; i < columnHeight; i++)
         {
             Vector3 chunkPos = new Vector3
                 (transform.position.x, i * chunkHeight, transform.position.z);
@@ -55,7 +65,7 @@ public class World : MonoBehaviour {
         // each chunk as you made them. But for the
         // purpose of being able to see the inter chunk
         // optimization we draw them after they all exist.
-        foreach(KeyValuePair<string, Chunk> c in chunks)
+        foreach (KeyValuePair<string, Chunk> c in chunks)
         {
             c.Value.DrawChunk(chunkSize, chunkHeight);
             yield return null;
@@ -64,7 +74,7 @@ public class World : MonoBehaviour {
 
     IEnumerator BuildWorld()
     {
-        for(int x = 0; x < worldSize; x++)
+        for (int x = 0; x < worldSize; x++)
             for (int y = 0; y < columnHeight; y++)
                 for (int z = 0; z < worldSize; z++)
                 {
@@ -110,13 +120,6 @@ public class World : MonoBehaviour {
                 {
                     allVertices[x, y, z] = new Vector3(x, y, z);
                 }
-
-        allNormals[(int)NDIR.UP] = Vector3.up;
-        allNormals[(int)NDIR.DOWN] = Vector3.down;
-        allNormals[(int)NDIR.LEFT] = Vector3.left;
-        allNormals[(int)NDIR.RIGHT] = Vector3.right;
-        allNormals[(int)NDIR.FRONT] = Vector3.forward;
-        allNormals[(int)NDIR.BACK] = Vector3.back;
     }
 
     public int GetSeed()
@@ -127,7 +130,7 @@ public class World : MonoBehaviour {
 
     #region Builtin Methods
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         SetUp();
 
@@ -143,9 +146,9 @@ public class World : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update ()
-	{
+    void Update()
+    {
 
-	}
+    }
     #endregion
 }
