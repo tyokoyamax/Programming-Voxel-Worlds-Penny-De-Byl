@@ -8,6 +8,7 @@ namespace Assets.Scripts.Domain
 {
     public enum BlockType { GRASS, DIRT, STONE, SAND, AIR };
 
+    public enum NDIR { UP, DOWN, LEFT, RIGHT, FRONT, BACK }
 
     /// <summary>
     /// Shared
