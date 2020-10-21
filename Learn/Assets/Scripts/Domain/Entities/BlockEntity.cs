@@ -22,7 +22,7 @@ namespace Assets.Scripts.Domain.Entities
         /// <summary>
         /// ブロックテクスチャの種類
         /// </summary>
-        private enum BlockTexture { GRASS_TOP, GRASS_SIDE, DIRT, STONE, SAND };
+        private enum BlockTexture { GRASS_TOP, GRASS_SIDE, DIRT, STONE, SAND, DIAMOND };
 
         /// <summary>
         /// ブロックUV
@@ -79,6 +79,16 @@ namespace Assets.Scripts.Domain.Entities
                     { UV.X1Y1, new Vector2(     0f, 0.3125f) }
                 }
             },
+            {
+                BlockTexture.DIAMOND,
+                new Dictionary<UV, Vector2>()
+                {
+                    { UV.X0Y0, new Vector2( 0.125f,   0.75f) },
+                    { UV.X1Y0, new Vector2(0.1875f,   0.75f) },
+                    { UV.X0Y1, new Vector2( 0.125f, 0.8125f) },
+                    { UV.X1Y1, new Vector2(0.1875f, 0.8125f) }
+                }
+            },
         };
 
         /// <summary>
@@ -132,6 +142,18 @@ namespace Assets.Scripts.Domain.Entities
                     { Cubeside.RIGHT,  BlockTexture.SAND },
                     { Cubeside.FRONT,  BlockTexture.SAND },
                     { Cubeside.BACK,   BlockTexture.SAND },
+                }
+            },
+            {
+                BlockType.DIAMOND,
+                new Dictionary<Cubeside, BlockTexture>()
+                {
+                    { Cubeside.BOTTOM, BlockTexture.DIAMOND },
+                    { Cubeside.TOP,    BlockTexture.DIAMOND },
+                    { Cubeside.LEFT,   BlockTexture.DIAMOND },
+                    { Cubeside.RIGHT,  BlockTexture.DIAMOND },
+                    { Cubeside.FRONT,  BlockTexture.DIAMOND },
+                    { Cubeside.BACK,   BlockTexture.DIAMOND },
                 }
             },
         };

@@ -37,10 +37,19 @@ namespace Assets.Scripts.Domain.Entities
 
                         int baseSurfaceHeight = NoiseHelper.GenerateHeight(worldX, worldZ, seed);
                         int stoneSurfaceHeight = NoiseHelper.GenerateStoneHeight(worldX, worldZ, seed);
+                        float caves = NoiseHelper.fBM3D(worldX, worldY, worldZ, 0.1f, 3, seed);
 
                         // generate surface terrain
-                        if (worldY <= stoneSurfaceHeight)
-                            chunkData[x, y, z] = new BlockEntity(BlockType.STONE, pos, chunk, this);
+                        if (caves < 0.42f)
+                            chunkData[x, y, z] = new BlockEntity(BlockType.AIR, pos, chunk, this);
+                        else if (worldY <= stoneSurfaceHeight)
+                        {
+                            float diamondLump = NoiseHelper.fBM3D(worldX, worldY, worldZ, 0.01f, 2, seed);
+                            if (diamondLump < 0.4f && worldY < 40)
+                                chunkData[x, y, z] = new BlockEntity(BlockType.DIAMOND, pos, chunk, this);
+                            else
+                                chunkData[x, y, z] = new BlockEntity(BlockType.STONE, pos, chunk, this);
+                        }
                         else if (worldY == baseSurfaceHeight)
                             chunkData[x, y, z] = new BlockEntity(BlockType.GRASS, pos, chunk, this);
                         else if (worldY < baseSurfaceHeight)

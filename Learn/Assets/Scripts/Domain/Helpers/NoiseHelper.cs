@@ -43,6 +43,19 @@ namespace Assets.Scripts.Domain.Helpers
             return Mathf.Lerp(newMin, newMax, Mathf.InverseLerp(origMin, origMax, value));
         }
 
+        public static float fBM3D(float x, float y, float z, float ro, int oct, int seed)
+        {
+            float XY = fBM(x * ro, y * ro, oct, 0.5f, seed);
+            float YZ = fBM(y * ro, z * ro, oct, 0.5f, seed);
+            float XZ = fBM(x * ro, z * ro, oct, 0.5f, seed);
+
+            float YX = fBM(y * ro, x * ro, oct, 0.5f, seed);
+            float ZY = fBM(z * ro, y * ro, oct, 0.5f, seed);
+            float ZX = fBM(z * ro, x * ro, oct, 0.5f, seed);
+
+            return (XY + YZ + XZ + YX + ZY + ZX) / 6.0f;
+        }
+
         static float fBM(float x, float z, int octaves, float persistence, int seed)
         {
             float total = 0f;
