@@ -36,18 +36,17 @@ namespace Assets.Scripts.Domain.Entities
                         int worldZ = z + (int)chunk.transform.position.z;
 
                         int baseSurfaceHeight = NoiseHelper.GenerateHeight(worldX, worldZ, seed);
+                        int stoneSurfaceHeight = NoiseHelper.GenerateStoneHeight(worldX, worldZ, seed);
 
                         // generate surface terrain
-                        if (worldY <= baseSurfaceHeight - 5)
+                        if (worldY <= stoneSurfaceHeight)
                             chunkData[x, y, z] = new BlockEntity(BlockType.STONE, pos, chunk, this);
                         else if (worldY == baseSurfaceHeight)
                             chunkData[x, y, z] = new BlockEntity(BlockType.GRASS, pos, chunk, this);
                         else if (worldY < baseSurfaceHeight)
                             chunkData[x, y, z] = new BlockEntity(BlockType.DIRT, pos, chunk, this);
                         else
-                        {
                             chunkData[x, y, z] = new BlockEntity(BlockType.AIR, pos, chunk, this);
-                        }
                     }
         }
 

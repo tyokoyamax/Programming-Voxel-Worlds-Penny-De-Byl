@@ -14,9 +14,27 @@ namespace Assets.Scripts.Domain.Helpers
         static int octaves = 4;
         static float persistence = 0.5f;
 
+        public static int GenerateStoneHeight(float x, float z, int seed)
+        {
+            float height = ScaleTo(
+                newMin: 0f,
+                newMax: maxHeight - 5,
+                origMin: 0f,
+                origMax: 1f,
+                value: fBM(x * roughness * 2, z * roughness * 2, octaves + 1, persistence, seed));
+
+            return (int)height;
+        }
+
         public static int GenerateHeight(float x, float z, int seed)
         {
-            float height = ScaleTo(0f, maxHeight, 0f, 1f, fBM(x * roughness, z * roughness, octaves, persistence, seed));
+            float height = ScaleTo(
+                 newMin: 0f,
+                 newMax: maxHeight,
+                 origMin: 0f,
+                 origMax: 1f,
+                 value: fBM(x * roughness, z * roughness, octaves, persistence, seed));
+
             return (int)height;
         }
 

@@ -136,20 +136,35 @@ namespace Assets.Scripts.Domain.Entities
             },
         };
 
-
+        /// <summary>
+        /// ブロックタイプ
+        /// </summary>
         public readonly BlockType blockType;
 
+        /// <summary>
+        /// ブロック座標
+        /// </summary>
         public readonly Vector3 position;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public readonly GameObject parent;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public readonly ChunkEntity owner;
 
+        /// <summary>
+        /// 固体かを示す
+        /// </summary>
         public readonly bool isSolid;
 
-        readonly int x;
-        readonly int y;
-        readonly int z;
+        /// <summary>
+        /// ブロック座標値
+        /// </summary>
+        private readonly int x, y, z;
 
         /// <summary>
         /// コンストラクタ
