@@ -26,16 +26,6 @@ namespace Assets.Scripts.Domain.Entities
         public static Vector3[,,] allVertices = new Vector3[chunkSize + 1, chunkHeight + 1, chunkSize + 1];
 
         public static Dictionary<string, ChunkEntity> chunks = new Dictionary<string, ChunkEntity>();
-
-        public static IReadOnlyDictionary<NDIR, Vector3> allNormals = new Dictionary<NDIR, Vector3>()
-        {
-            { NDIR.UP, Vector3.up },
-            { NDIR.DOWN, Vector3.down },
-            { NDIR.LEFT, Vector3.left },
-            { NDIR.RIGHT, Vector3.right },
-            { NDIR.FRONT, Vector3.forward },
-            { NDIR.BACK, Vector3.back },
-        };
         #endregion
 
         #region Custom Methods

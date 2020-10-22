@@ -6,10 +6,6 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Domain
 {
-    public enum BlockType { GRASS, DIRT, STONE, SAND, DIAMOND, AIR };
-
-    public enum NDIR { UP, DOWN, LEFT, RIGHT, FRONT, BACK }
-
     /// <summary>
     /// Shared
     /// </summary>

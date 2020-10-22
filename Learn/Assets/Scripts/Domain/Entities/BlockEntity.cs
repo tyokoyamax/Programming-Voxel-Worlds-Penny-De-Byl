@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Domain.ValueObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -159,6 +160,20 @@ namespace Assets.Scripts.Domain.Entities
         };
 
         /// <summary>
+        /// ブロック面の法線方向
+        /// </summary>
+        private static readonly IReadOnlyDictionary<Cubeside, IReadOnlyList<Vector3>> normals = new Dictionary<Cubeside, IReadOnlyList<Vector3>>()
+        {
+            { Cubeside.BOTTOM, new List<Vector3>() { Vector3.down, Vector3.down, Vector3.down, Vector3.down } },
+            { Cubeside.TOP, new List<Vector3>() { Vector3.up, Vector3.up, Vector3.up, Vector3.up } },
+            { Cubeside.LEFT, new List<Vector3>() { Vector3.left, Vector3.left, Vector3.left, Vector3.left } },
+            { Cubeside.RIGHT, new List<Vector3>() { Vector3.right, Vector3.right, Vector3.right, Vector3.right } },
+            { Cubeside.FRONT, new List<Vector3>() { Vector3.forward, Vector3.forward, Vector3.forward, Vector3.forward } },
+            { Cubeside.BACK, new List<Vector3>() { Vector3.back, Vector3.back, Vector3.back, Vector3.back } },
+        };
+
+
+        /// <summary>
         /// ブロックタイプ
         /// </summary>
         public readonly BlockType blockType;
@@ -210,16 +225,26 @@ namespace Assets.Scripts.Domain.Entities
         }
 
 
+
         void CreateQuad(Cubeside side, List<Vector3> v, List<Vector3> n, List<Vector2> u, List<int> t)
         {
-            //all possible UVs
+            // settings normals
+            n.AddRange(normals[side]);
+
+            // settings UVs
             BlockTexture blockTexture = blockTextures[blockType][side];
             Vector2 uv00 = blockUVs[blockTexture][UV.X0Y0];
             Vector2 uv10 = blockUVs[blockTexture][UV.X1Y0];
             Vector2 uv01 = blockUVs[blockTexture][UV.X0Y1];
             Vector2 uv11 = blockUVs[blockTexture][UV.X1Y1];
+            u.Add(uv11); u.Add(uv01); u.Add(uv00); u.Add(uv10);
 
-            //all possible vertices 
+            // settings tris
+            int trioffset = v.Count;
+            t.Add(3 + trioffset); t.Add(1 + trioffset); t.Add(0 + trioffset); t.Add(3 + trioffset); t.Add(2 + trioffset); t.Add(1 + trioffset);
+
+            // settings vertices
+            // all possible vertices 
             Vector3 p0 = WorldEntity.allVertices[x, y, z + 1];
             Vector3 p1 = WorldEntity.allVertices[x + 1, y, z + 1];
             Vector3 p2 = WorldEntity.allVertices[x + 1, y, z];
@@ -229,68 +254,25 @@ namespace Assets.Scripts.Domain.Entities
             Vector3 p6 = WorldEntity.allVertices[x + 1, y + 1, z];
             Vector3 p7 = WorldEntity.allVertices[x, y + 1, z];
 
-            int trioffset = v.Count;
-
             switch (side)
             {
                 case Cubeside.BOTTOM:
                     v.Add(p0); v.Add(p1); v.Add(p2); v.Add(p3);
-                    n.Add(WorldEntity.allNormals[NDIR.DOWN]);
-                    n.Add(WorldEntity.allNormals[NDIR.DOWN]);
-                    n.Add(WorldEntity.allNormals[NDIR.DOWN]);
-                    n.Add(WorldEntity.allNormals[NDIR.DOWN]);
-                    u.Add(uv11); u.Add(uv01); u.Add(uv00); u.Add(uv10);
-                    t.Add(3 + trioffset); t.Add(1 + trioffset); t.Add(0 + trioffset); t.Add(3 + trioffset); t.Add(2 + trioffset); t.Add(1 + trioffset);
-
                     break;
                 case Cubeside.TOP:
                     v.Add(p7); v.Add(p6); v.Add(p5); v.Add(p4);
-                    n.Add(WorldEntity.allNormals[NDIR.UP]);
-                    n.Add(WorldEntity.allNormals[NDIR.UP]);
-                    n.Add(WorldEntity.allNormals[NDIR.UP]);
-                    n.Add(WorldEntity.allNormals[NDIR.UP]);
-                    u.Add(uv11); u.Add(uv01); u.Add(uv00); u.Add(uv10);
-                    t.Add(3 + trioffset); t.Add(1 + trioffset); t.Add(0 + trioffset); t.Add(3 + trioffset); t.Add(2 + trioffset); t.Add(1 + trioffset);
-
                     break;
                 case Cubeside.LEFT:
                     v.Add(p7); v.Add(p4); v.Add(p0); v.Add(p3);
-                    n.Add(WorldEntity.allNormals[NDIR.LEFT]);
-                    n.Add(WorldEntity.allNormals[NDIR.LEFT]);
-                    n.Add(WorldEntity.allNormals[NDIR.LEFT]);
-                    n.Add(WorldEntity.allNormals[NDIR.LEFT]);
-                    u.Add(uv11); u.Add(uv01); u.Add(uv00); u.Add(uv10);
-                    t.Add(3 + trioffset); t.Add(1 + trioffset); t.Add(0 + trioffset); t.Add(3 + trioffset); t.Add(2 + trioffset); t.Add(1 + trioffset);
-
                     break;
                 case Cubeside.RIGHT:
                     v.Add(p5); v.Add(p6); v.Add(p2); v.Add(p1);
-                    n.Add(WorldEntity.allNormals[NDIR.RIGHT]);
-                    n.Add(WorldEntity.allNormals[NDIR.RIGHT]);
-                    n.Add(WorldEntity.allNormals[NDIR.RIGHT]);
-                    n.Add(WorldEntity.allNormals[NDIR.RIGHT]);
-                    u.Add(uv11); u.Add(uv01); u.Add(uv00); u.Add(uv10);
-                    t.Add(3 + trioffset); t.Add(1 + trioffset); t.Add(0 + trioffset); t.Add(3 + trioffset); t.Add(2 + trioffset); t.Add(1 + trioffset);
-
                     break;
                 case Cubeside.FRONT:
                     v.Add(p4); v.Add(p5); v.Add(p1); v.Add(p0);
-                    n.Add(WorldEntity.allNormals[NDIR.FRONT]);
-                    n.Add(WorldEntity.allNormals[NDIR.FRONT]);
-                    n.Add(WorldEntity.allNormals[NDIR.FRONT]);
-                    n.Add(WorldEntity.allNormals[NDIR.FRONT]);
-                    u.Add(uv11); u.Add(uv01); u.Add(uv00); u.Add(uv10);
-                    t.Add(3 + trioffset); t.Add(1 + trioffset); t.Add(0 + trioffset); t.Add(3 + trioffset); t.Add(2 + trioffset); t.Add(1 + trioffset);
-
                     break;
                 case Cubeside.BACK:
                     v.Add(p6); v.Add(p7); v.Add(p3); v.Add(p2);
-                    n.Add(WorldEntity.allNormals[NDIR.BACK]);
-                    n.Add(WorldEntity.allNormals[NDIR.BACK]);
-                    n.Add(WorldEntity.allNormals[NDIR.BACK]);
-                    n.Add(WorldEntity.allNormals[NDIR.BACK]);
-                    u.Add(uv11); u.Add(uv01); u.Add(uv00); u.Add(uv10);
-                    t.Add(3 + trioffset); t.Add(1 + trioffset); t.Add(0 + trioffset); t.Add(3 + trioffset); t.Add(2 + trioffset); t.Add(1 + trioffset);
                     break;
             }
         }
@@ -350,7 +332,7 @@ namespace Assets.Scripts.Domain.Entities
             {
                 return chunkInfo[x, y, z].isSolid;
             }
-            catch (System.IndexOutOfRangeException) { }
+            catch (IndexOutOfRangeException) { }
 
             return false;
         }
